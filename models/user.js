@@ -3,8 +3,30 @@ const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema(
     {
-        email: String,
-        password: String,
+        // email: String,
+        // password: String,
+        method:{
+            type:String,
+            enum:['local','google','apple']
+        },
+        local:{
+            email: {
+                type: String,
+                lowercase:true,
+            },
+            password:{
+               type:String
+            },
+        },
+        google:{
+            id:{
+                type:String,
+            },
+            email:{
+                type:String,
+                lowercase:true,
+            }
+        },
         isDeleted: {
             type: Boolean,
             default: false
@@ -20,21 +42,24 @@ const userSchema = new mongoose.Schema(
             transform: (obj, ret) => {
                 ret.id = ret._id;
                 delete ret._id;
-                delete ret.password;
+                // delete ret.password;
                 delete ret.__v;
-                return ret;
+                return obj;
             }
         }
     },
 );
 
 userSchema.pre("save", function (next) {
-    this.password = bcrypt.hashSync(this.password, bcrypt.genSaltSync(10));
+    if(this.method!='local'){
+        next();
+    }
+    this.local.password = bcrypt.hashSync(this.local.password, bcrypt.genSaltSync(10));
     next();
 });
 
 userSchema.methods.compareHash = function (password) {
-    return bcrypt.compareSync(password, this.password);
+    return bcrypt.compareSync(password, this.local.password);
 };
 
 module.exports = mongoose.model('User', userSchema);

@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 //"mongodb+srv://octivia:786Hh786@octivia.8rlek.mongodb.net/reka"
 mongoose
 	.connect(
-		"mongodb+srv://octivia:786Hh786@octivia.8rlek.mongodb.net/reka",
+		"mongodb+srv://octivia:786Hh786@octivia.8rlek.mongodb.net/reka?retryWrites=true&w=majority",
 		{
 			useNewUrlParser: true,
 			useUnifiedTopology: true,

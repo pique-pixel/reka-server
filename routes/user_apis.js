@@ -19,6 +19,7 @@ const PersonController=require('../controllers/person_controller');
 //Auth Routes
 Router.post('/register',AuthController.register);
 Router.post('/login',AuthController.login);
+Router.post('/Oauth/google',AuthController.googleLogin);
 
 //Activity Routes
 Router.post('/activity',ActivityController.create);
